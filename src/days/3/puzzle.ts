@@ -2,7 +2,7 @@ import Puzzle from '../../types/abstract-puzzle';
 import { PuzzleResult } from '../../types/puzzle.types';
 
 export default class ConcretePuzzle extends Puzzle {
-  public solveFirst(): PuzzleResult {
+  solveFirst(): PuzzleResult {
     const regex = /mul\(\d+,\d+\)/g;
     const groupMatches = this.input.match(regex);
 
@@ -14,7 +14,7 @@ export default class ConcretePuzzle extends Puzzle {
     return result;
   }
 
-  public solveSecond(): PuzzleResult {
+  solveSecond(): PuzzleResult {
     const regex = /mul\(\d+,\d+\)|do\(\)|don't\(\)/g;
     const matches = [...this.input.matchAll(regex)].map((array) => array[0]);
 
