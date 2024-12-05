@@ -1,4 +1,3 @@
-import { numberSum } from '../../helpers/number-sum';
 import { splitIntoLines } from '../../helpers/split-into-lines';
 import Puzzle from '../../types/abstract-puzzle';
 import { PuzzleResult } from '../../types/puzzle.types';
