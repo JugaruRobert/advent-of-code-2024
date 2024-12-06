@@ -41,7 +41,77 @@ export default class ConcretePuzzle extends Puzzle {
   }
 
   solveSecond(): PuzzleResult {
-    return 'unsolved';
+    const map = splitIntoLines(this.input).map((line) => line.split(''));
+    const initialMap = structuredClone(map);
+    let point = this.getStartingPosition(map);
+    const startingPoint = structuredClone(point);
+    const visited = new Set<string>();
+    let positionCount = 0;
+
+    while (true) {
+      const key = this.createKeyFromPoint(point);
+      if (visited.has(key)) {
+        break;
+      }
+
+      visited.add(key);
+
+      const isStartingPoint =
+        point.position.x === startingPoint.position.x &&
+        point.position.y === startingPoint.position.y;
+      if (map[point.position.x][point.position.y] !== 'X' && !isStartingPoint) {
+        const mapCopy = structuredClone(initialMap);
+        mapCopy[point.position.x][point.position.y] = '#';
+        if (this.isCycle(mapCopy, startingPoint)) {
+          positionCount++;
+        }
+      }
+
+      map[point.position.x][point.position.y] = 'X';
+
+      const nextX = point.position.x + point.direction.x;
+      const nextY = point.position.y + point.direction.y;
+
+      if (this.isOutOfBounds(map, nextX, nextY)) {
+        break;
+      }
+
+      if (map[nextX][nextY] === '#') {
+        point = { ...point, direction: this.getNextDirection(point.direction) };
+      } else {
+        point = { ...point, position: { x: nextX, y: nextY } };
+      }
+    }
+
+    return positionCount;
+  }
+
+  private isCycle(map: string[][], point: Point) {
+    const visited = new Set<string>();
+
+    while (true) {
+      const key = this.createKeyFromPoint(point);
+      if (visited.has(key)) {
+        return true;
+      }
+
+      visited.add(key);
+
+      const nextX = point.position.x + point.direction.x;
+      const nextY = point.position.y + point.direction.y;
+
+      if (this.isOutOfBounds(map, nextX, nextY)) {
+        return false;
+      }
+
+      if (map[nextX][nextY] === '#') {
+        point = { ...point, direction: this.getNextDirection(point.direction) };
+      } else {
+        point = { ...point, position: { x: nextX, y: nextY } };
+      }
+    }
+
+    return false;
   }
 
   private getStartingPosition(map: string[][]): Point {
