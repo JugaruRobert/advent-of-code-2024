@@ -1,3 +1,4 @@
+import { isOutOfBounds } from '../../helpers/is-out-of-bounds';
 import { splitIntoLines } from '../../helpers/split-into-lines';
 import Puzzle from '../../types/abstract-puzzle';
 import { PuzzleResult } from '../../types/puzzle.types';
@@ -26,7 +27,7 @@ export default class ConcretePuzzle extends Puzzle {
       const nextX = point.position.x + point.direction.x;
       const nextY = point.position.y + point.direction.y;
 
-      if (this.isOutOfBounds(map, nextX, nextY)) {
+      if (isOutOfBounds(map, nextX, nextY)) {
         break;
       }
 
